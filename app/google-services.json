@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1057386331582",
+    "project_id": "praisesns-2f4a2",
+    "storage_bucket": "praisesns-2f4a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057386331582:android:ef3c90151110c511230def",
+        "android_client_info": {
+          "package_name": "app.ito.akki.praisesns"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057386331582-4q34h8mbn1vitg0dds9ugogv7d6eoe0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsfDdpo9nMnx9wSN-D1-4cBihmYvODyxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057386331582-4q34h8mbn1vitg0dds9ugogv7d6eoe0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
