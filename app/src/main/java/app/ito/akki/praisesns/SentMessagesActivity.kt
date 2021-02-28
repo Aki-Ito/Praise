@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sent_messages.*
+import kotlinx.android.synthetic.main.mail.*
 
 //自分の受信ボックスにメッセージが追加されたタイミングで送信ボタンの下に設置してあるRecyclerViewにメッセージが追加されていくようにする
 class SentMessagesActivity : AppCompatActivity() {
@@ -48,11 +49,13 @@ class SentMessagesActivity : AppCompatActivity() {
                     return@addSnapshotListener
             }
                 //allMessagesから全ての要素を取り除く
-                allMessages.clear()
                 for (doc in value!!){
                     val message = doc.getString("message")
                     val sender = doc.getString("sender")
                     allMessages.add(listOf(message, sender))
+
+                    Log.d("sentMessages", "メッセージは「"+message+"」")
+                    Log.d("sender", "senderは「"+sender+"」")
                 }
 
                 //RecyclerViewの更新をする
