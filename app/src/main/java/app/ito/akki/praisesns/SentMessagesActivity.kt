@@ -31,7 +31,7 @@ class SentMessagesActivity : AppCompatActivity() {
         myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
 
         //受信ボックスのメッセージを取得してrecyclerViewに反映する
-        val db = FirebaseFirestore.getInstance()
+        db = FirebaseFirestore.getInstance()
         val allMessages = ArrayList<List<String?>>()
         //名前を入力してコレクションを取得する
         db.collection("messages")
