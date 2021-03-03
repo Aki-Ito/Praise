@@ -13,13 +13,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sent_messages.*
 import kotlinx.android.synthetic.main.mail.*
 
-//自分の受信ボックスにメッセージが追加されたタイミングで送信ボタンの下に設置してあるRecyclerViewにメッセージが追加されていくようにする
+//自分の受信ボックスにメッセージが追加されたタイミングでメッセージがRecyclerViewに表示されるようにしていく必要がある。
 class SentMessagesActivity : AppCompatActivity() {
 
     //lateinitで宣言することによってプロパティの初期化を遅らせることができる
     private lateinit var myEmailAddress: String
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewAdapter: DisplayMessageAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var db: FirebaseFirestore
 
@@ -36,6 +36,7 @@ class SentMessagesActivity : AppCompatActivity() {
         val allMessages = ArrayList<List<String?>>()
         //名前を入力してコレクションを取得する
         db.collection("messages")
+                //documentで焦点を当てる
             .document(myEmailAddress)
             .collection("inbox")
             //orderByを使用することでフィールドを指定し、データの並び替えができる
@@ -43,6 +44,7 @@ class SentMessagesActivity : AppCompatActivity() {
             .orderBy("datetime", Query.Direction.DESCENDING)
             //以下でFirestoreの更新時の操作を登録
             //.addSnapshotListenerの中に書いた処理がデータベース更新時に自動で処理される
+            //データの取得
             .addSnapshotListener{ value, e ->
                 if (e != null){
                 Log.w("Firestore", "Listen failed.", e)
@@ -54,6 +56,7 @@ class SentMessagesActivity : AppCompatActivity() {
                     val sender = doc.getString("sender")
                     allMessages.add(listOf(message, sender))
 
+                    //Logに出力させることで値が保存されているか確認することができる
                     Log.d("sentMessages", "メッセージは「"+message+"」")
                     Log.d("sender", "senderは「"+sender+"」")
                 }
@@ -61,6 +64,8 @@ class SentMessagesActivity : AppCompatActivity() {
                 //RecyclerViewの更新をする
                 //RecyclerViewに紐づいているallMessagesの更新を表示に反映するために
                 //notifyDataSetChanged()を使用する
+                // iOSでいうtableView.reloadData()
+                viewAdapter.myDataset = allMessages
                 viewAdapter.notifyDataSetChanged()
             }
             //.get()

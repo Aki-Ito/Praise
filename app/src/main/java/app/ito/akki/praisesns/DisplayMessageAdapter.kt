@@ -11,7 +11,7 @@ class DisplayMessageAdapter
     //コンストラクタを追加
     //コンストラクタって何？？
     //クラスを作った時にすぐ代入されるもの
-    (private val myDataset: ArrayList<List<String?>>)
+    (var myDataset: ArrayList<List<String?>>)
     //DisplayMessageAdapterクラスにRecyclerView.Adapterを継承する。
     : RecyclerView.Adapter<DisplayMessageAdapter.ViewHolder>(){
 
@@ -21,6 +21,7 @@ class DisplayMessageAdapter
         val message: TextView = view.message
     }
 
+    // iOS: CellForRowAtのセルの作成部分（セルの作成）
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflateView = LayoutInflater.from(parent.context)
             .inflate(R.layout.mail, parent, false)
@@ -28,8 +29,10 @@ class DisplayMessageAdapter
     }
 
     //リストの要素数を返すメソッドを実装する。
+    // iOS: numberOfRowsInSection
     override fun getItemCount() = myDataset.size
 
+    // iOS: CellForRowAt（データを設定）
     //myDatasetのposition番目の要素をrecyclerViewのviewに表示するコードを書く
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.message.text = myDataset[position][0]

@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
 //ログイン機能の実装 Firebase Auth
@@ -27,9 +28,9 @@ class LoginActivity : AppCompatActivity() {
 
 
         buttonSignup.setOnClickListener {
-            val emailEditText = findViewById<EditText>(R.id.emailEditText)
+            val emailEditText = findViewById<TextInputEditText>(R.id.emailEdit)
             val emailText = emailEditText.text.toString()
-            val passEditText = findViewById<EditText>(R.id.passEditText)
+            val passEditText = findViewById<TextInputEditText>(R.id.passEdit)
             val passWordText = passEditText.text.toString()
 
             //メールアドレスとパスワードを使い、新規登録をする
@@ -54,9 +55,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         buttonLogin.setOnClickListener {
-            val emailEditText = findViewById<EditText>(R.id.emailEditText)
+            val emailEditText = findViewById<TextInputEditText>(R.id.emailEdit)
             val emailText = emailEditText.text.toString()
-            val passEditText = findViewById<EditText>(R.id.passEditText)
+            val passEditText = findViewById<TextInputEditText>(R.id.passEdit)
             val passWordText = passEditText.text.toString()
 
             auth.signInWithEmailAndPassword(emailText, passWordText)

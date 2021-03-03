@@ -8,69 +8,83 @@
 
     <Button
         android:id="@+id/SignUpButton"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="38dp"
+        android:background="@drawable/background_circle"
+        android:backgroundTint="#FFA500"
         android:text="SignUP"
-        app:layout_constraintBaseline_toBaselineOf="@+id/LoginButton"
-        app:layout_constraintEnd_toEndOf="@+id/emailLabel"
-        app:layout_constraintStart_toStartOf="@+id/passLabel" />
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/LoginButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/LoginButton"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="251dp"
+        android:layout_marginBottom="104dp"
+        android:background="@drawable/background_circle"
+        android:backgroundTint="#FFA500"
         android:text="LogIn"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/emailLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="6dp"
-        android:text="メールアドレス："
-        app:layout_constraintEnd_toStartOf="@+id/emailEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/emailEditText" />
-
-    <TextView
-        android:id="@+id/passLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="231dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="230dp"
-        android:text="パスワード："
-        app:layout_constraintBottom_toBottomOf="@+id/LoginButton"
-        app:layout_constraintEnd_toStartOf="@+id/passEditText"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="110dp"
-        android:layout_marginBottom="107dp"
-        android:ems="10"
-        android:hint="email"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="@+id/passEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/emailLabel"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/passEditText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="168dp"
+        android:layout_marginEnd="8dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="メールアドレス" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="パスワード" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:ems="10"
-        android:hint="password"
-        android:inputType="textPersonName"
-        app:layout_constraintBaseline_toBaselineOf="@+id/passLabel"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginTop="56dp"
+        android:text="PraisingSNS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

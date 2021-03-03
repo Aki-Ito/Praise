@@ -77,15 +77,17 @@ class MainActivity : AppCompatActivity() {
         val mail = hashMapOf(
             "datetime" to format.format(date),
             "sender" to myEmailAddress,
-            "messege" to message
+            "message" to message
         )
 
         //collectionにいれたものがコレクションに入る
-        db.collection("messages")
+        db.collection("messages") //usersとかmail
             //そしてdocumentに入れたものがこの中でいうmessagesに入ることになる
+            //あるものを取得する
             .document(destEmailAddr)
             .collection("inbox")
             //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
+            //追加する
             .add(mail)
             .addOnSuccessListener {
                 //データの保存が成功した際の処理
