@@ -1,5 +1,6 @@
 package app.ito.akki.praisesns
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -36,9 +37,6 @@ class SentMessagesActivity : AppCompatActivity() {
         val allMessages = ArrayList<List<String?>>()
         //名前を入力してコレクションを取得する
         db.collection("messages")
-                //documentで焦点を当てる
-            .document(myEmailAddress)
-            .collection("inbox")
             //orderByを使用することでフィールドを指定し、データの並び替えができる
             //Query.Direction.DESCENDINGによって降順に並び替えることができる
             .orderBy("datetime", Query.Direction.DESCENDING)
@@ -47,9 +45,9 @@ class SentMessagesActivity : AppCompatActivity() {
             //データの取得
             .addSnapshotListener{ value, e ->
                 if (e != null){
-                Log.w("Firestore", "Listen failed.", e)
+                    Log.w("Firestore", "Listen failed.", e)
                     return@addSnapshotListener
-            }
+                }
                 //allMessagesから全ての要素を取り除く
                 for (doc in value!!){
                     val message = doc.getString("message")
@@ -68,7 +66,7 @@ class SentMessagesActivity : AppCompatActivity() {
                 viewAdapter.myDataset = allMessages
                 viewAdapter.notifyDataSetChanged()
             }
-            //.get()
+        //.get()
 //            .addOnSuccessListener {result ->
 //                for (document in result){
 //                    val message = document.getString("message")
@@ -85,6 +83,11 @@ class SentMessagesActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
+        }
+
+        post.setOnClickListener {
+            val toMain = Intent(this, MainActivity::class.java)
+            startActivity(toMain)
         }
 
 

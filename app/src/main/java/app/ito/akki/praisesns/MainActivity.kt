@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         //送信ボタンを押した時の設定
         send.setOnClickListener {
-            sendMessage(destEmailAddrEdit.text.toString(), messageEdit.text.toString())
+            sendMessage(messageEdit.text.toString())
         }
     }
 
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //メッセージをデータベースに格納する
-    fun sendMessage(destEmailAddr: String, message: String) {
+    fun sendMessage(message: String) {
         val db = FirebaseFirestore.getInstance()
 
         //現在時刻の取得
@@ -82,10 +82,7 @@ class MainActivity : AppCompatActivity() {
 
         //collectionにいれたものがコレクションに入る
         db.collection("messages") //usersとかmail
-            //そしてdocumentに入れたものがこの中でいうmessagesに入ることになる
-            //あるものを取得する
-            .document(destEmailAddr)
-            .collection("inbox")
+
             //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
             //追加する
             .add(mail)

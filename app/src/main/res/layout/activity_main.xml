@@ -10,34 +10,25 @@
         android:id="@+id/myId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="80dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/destEmailAddrEdit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/destEmailAddrEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="198dp"
-        android:ems="10"
-        android:hint="送り先"
-        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
         android:id="@+id/messageEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="222dp"
+        android:layout_marginBottom="223dp"
         android:ems="10"
         android:hint="メッセージ"
         android:inputType="textMultiLine"
-        app:layout_constraintStart_toStartOf="@+id/destEmailAddrEdit"
-        app:layout_constraintTop_toBottomOf="@+id/destEmailAddrEdit" />
+        app:layout_constraintBottom_toTopOf="@+id/send"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <Button
         android:id="@+id/send"
