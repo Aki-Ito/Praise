@@ -3,18 +3,16 @@ package app.ito.akki.praisesns
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Telephony
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.appcompat.widget.Toolbar;
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     //lateinitで宣言することによってプロパティの初期化を遅らせる
@@ -80,12 +78,14 @@ class MainActivity : AppCompatActivity() {
             "message" to message
         )
 
+        val mail2 = Post(date, myEmailAddress, message, null)
+
         //collectionにいれたものがコレクションに入る
         db.collection("messages") //usersとかmail
 
             //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
             //追加する
-            .add(mail)
+            .add(mail2)
             .addOnSuccessListener {
                 //データの保存が成功した際の処理
                 messageEdit.text.clear()

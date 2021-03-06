@@ -4,37 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ReplyActivity">
 
-    <TextView
-        android:id="@+id/myId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="TextView"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/replyMessageInbox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="160dp"
+        android:layout_marginBottom="224dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/messageEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="222dp"
-        android:layout_marginBottom="223dp"
+        android:layout_marginBottom="25dp"
         android:ems="10"
-        android:hint="自分の行ったことを投稿しよう!"
+        android:hint="返信を投稿しよう"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toTopOf="@+id/send"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/send"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="134dp"
+        android:layout_marginBottom="68dp"
         android:background="@drawable/background_circle"
         android:text="送信"
         android:textColor="@color/white"
@@ -53,4 +53,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

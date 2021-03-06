@@ -1,33 +1,42 @@
 package app.ito.akki.praisesns
 
-import android.content.Context
-import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.messageEdit
+import kotlinx.android.synthetic.main.activity_main.send
+import kotlinx.android.synthetic.main.activity_reply.*
 import kotlinx.android.synthetic.main.activity_sent_messages.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-//自分の受信ボックスにメッセージが追加されたタイミングでメッセージがRecyclerViewに表示されるようにしていく必要がある。
-class SentMessagesActivity : AppCompatActivity() {
 
-    //lateinitで宣言することによってプロパティの初期化を遅らせることができる
+class ReplyActivity : AppCompatActivity() {
+
     private lateinit var myEmailAddress: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: DisplayMessageAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var db: FirebaseFirestore
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sent_messages)
+        setContentView(R.layout.activity_reply)
+
+        myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
+
+        send.setOnClickListener {
+            replyMessage(
+                messageEdit.text.toString()
+            )
+        }
 
         myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
 
@@ -47,9 +56,8 @@ class SentMessagesActivity : AppCompatActivity() {
                     Log.w("Firestore", "Listen failed.", e)
                     return@addSnapshotListener
                 }
-                //allMessagesから全ての要素を取り除く
                 for (doc in value!!) {
-                    val PostClass = doc.toObject<Post>()
+                    val PostClass = doc.toObject<Reply>()
 
                     allMessages.add(listOf(PostClass.message, PostClass.sender))
 
@@ -65,43 +73,52 @@ class SentMessagesActivity : AppCompatActivity() {
                 viewAdapter.myDataset = allMessages
                 viewAdapter.notifyDataSetChanged()
             }
-        //.get()
-//            .addOnSuccessListener {result ->
-//                for (document in result){
-//                    val message = document.getString("message")
-//                    val sender = document.getString("sender")
-//                    //配列に要素を追加できるようにする
-//                    allMessages.add(listOf(message, sender))
-//                }
-//            }
 
-        //recyclerViewの設定
+
         viewManager = LinearLayoutManager(this)
         viewAdapter = DisplayMessageAdapter(allMessages)
-        recyclerView = messageInbox.apply {
+        recyclerView = replyMessageInbox.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
         }
+    }
 
-        post.setOnClickListener {
-            val toMain = Intent(this, MainActivity::class.java)
-            startActivity(toMain)
-        }
+    //メッセージをデータベースに格納する
+    fun replyMessage(message: String) {
+        val db = FirebaseFirestore.getInstance()
 
+        //現在時刻の取得
+        val date = Date()
+        val format = SimpleDateFormat("yyyy/MM/dd HH::mm::ss")
 
-        viewAdapter.setOnItemClickListener(object : DisplayMessageAdapter.OnItemClickListener {
-            override fun onItemClickListener(
-                view: View,
-                position: Int,
-                clickedText: List<String?>
-            ) {
-                val context: Context = view.context
-                context.startActivity(Intent(context, ReplyActivity::class.java))
-            }
-           }
+        //map...keyとvalueを一つのセットにしてデータを管理する
+        //他言語ではハッシュや辞書(ディクショナリ)と呼ばれるもの
+        //Firestoreでデータを登録する際、Hashを必ず使用する。型が指定されている。
+        val mail = hashMapOf(
+            "datetime" to format.format(date),
+            "sender" to myEmailAddress,
+            "message" to message
         )
 
+        val mail2 = Reply(date, myEmailAddress, message)
 
+
+
+        //collectionにいれたものがコレクションに入る
+        db.collection("messages") //usersとかmail
+
+            //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
+            //追加する
+            .add(mail2)
+            .addOnSuccessListener {
+                //データの保存が成功した際の処理
+                messageEdit.text.clear()
+            }
+            .addOnFailureListener { e ->
+                //データの保存が失敗した際の処理
+                //致命的なエラーが発生したらログに出力されるようにする。
+                Log.w("Firestore", "Error writing document", e)
+            }
     }
 }

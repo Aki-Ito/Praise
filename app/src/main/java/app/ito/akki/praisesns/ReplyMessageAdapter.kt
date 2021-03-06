@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mail.view.*
 
-class DisplayMessageAdapter
-    //コンストラクタを追加
-    //コンストラクタって何？？
-    //クラスを作った時にすぐ代入されるもの
+class ReplyMessageAdapter
+//コンストラクタを追加
+//コンストラクタって何？？
+//クラスを作った時にすぐ代入されるもの
     (var myDataset: ArrayList<List<String?>>)
-    //DisplayMessageAdapterクラスにRecyclerView.Adapterを継承する。
-    : RecyclerView.Adapter<DisplayMessageAdapter.ViewHolder>(){
+//DisplayMessageAdapterクラスにRecyclerView.Adapterを継承する。
+    : RecyclerView.Adapter<ReplyMessageAdapter.ViewHolder>(){
 
     //リスナを格納する変数を定義する(lateinitで初期化を遅らせている)
     lateinit var listener: OnItemClickListener
@@ -23,13 +23,12 @@ class DisplayMessageAdapter
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val sender: TextView = view.sender
         val message: TextView = view.message
-        val container: LinearLayout = view.container
     }
 
     // iOS: CellForRowAtのセルの作成部分（セルの作成）
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflateView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.mail, parent, false)
+            .inflate(R.layout.replymessage, parent, false)
         return ViewHolder(inflateView)
     }
 
@@ -43,9 +42,6 @@ class DisplayMessageAdapter
         holder.message.text = myDataset[position][0]
         holder.sender.text = "from: " + myDataset[position][1]
 
-        holder.container.setOnClickListener {
-            listener.onItemClickListener(it, position, myDataset[position])
-        }
     }
 
     //インタフェースを作成する
