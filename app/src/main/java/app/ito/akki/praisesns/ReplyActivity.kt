@@ -22,7 +22,7 @@ class ReplyActivity : AppCompatActivity() {
 
     private lateinit var myEmailAddress: String
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: DisplayMessageAdapter
+    private lateinit var viewAdapter: ReplyMessageAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var db: FirebaseFirestore
 
@@ -44,7 +44,7 @@ class ReplyActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         val allMessages = ArrayList<List<String?>>()
         //名前を入力してコレクションを取得する
-        db.collection("messages")
+        db.collection("reply")
             //orderByを使用することでフィールドを指定し、データの並び替えができる
             //Query.Direction.DESCENDINGによって降順に並び替えることができる
             .orderBy("datetime", Query.Direction.DESCENDING)
@@ -57,13 +57,13 @@ class ReplyActivity : AppCompatActivity() {
                     return@addSnapshotListener
                 }
                 for (doc in value!!) {
-                    val PostClass = doc.toObject<Reply>()
+                    val ReplyClass = doc.toObject<Reply>()
 
-                    allMessages.add(listOf(PostClass.message, PostClass.sender))
+                    allMessages.add(listOf(ReplyClass.message, ReplyClass.sender))
 
                     //Logに出力させることで値が保存されているか確認することができる
-                    Log.d("sentMessages", "メッセージは「" + PostClass.message + "」")
-                    Log.d("sender", "senderは「" + PostClass.sender + "」")
+                    Log.d("sentMessages", "メッセージは「" + ReplyClass.message + "」")
+                    Log.d("sender", "senderは「" + ReplyClass.sender + "」")
                 }
 
                 //RecyclerViewの更新をする
@@ -76,7 +76,7 @@ class ReplyActivity : AppCompatActivity() {
 
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = DisplayMessageAdapter(allMessages)
+        viewAdapter = ReplyMessageAdapter(allMessages)
         recyclerView = replyMessageInbox.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -90,23 +90,22 @@ class ReplyActivity : AppCompatActivity() {
 
         //現在時刻の取得
         val date = Date()
-        val format = SimpleDateFormat("yyyy/MM/dd HH::mm::ss")
 
         //map...keyとvalueを一つのセットにしてデータを管理する
         //他言語ではハッシュや辞書(ディクショナリ)と呼ばれるもの
         //Firestoreでデータを登録する際、Hashを必ず使用する。型が指定されている。
-        val mail = hashMapOf(
-            "datetime" to format.format(date),
-            "sender" to myEmailAddress,
-            "message" to message
-        )
+//        val mail = hashMapOf(
+//            "datetime" to format.format(date),
+//            "sender" to myEmailAddress,
+//            "message" to message
+//        )
 
         val mail2 = Reply(date, myEmailAddress, message)
 
 
 
         //collectionにいれたものがコレクションに入る
-        db.collection("messages") //usersとかmail
+        db.collection("reply") //usersとかmail
 
             //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
             //追加する

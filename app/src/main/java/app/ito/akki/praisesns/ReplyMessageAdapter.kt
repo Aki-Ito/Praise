@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mail.view.*
 
+//ReplyMessageAdapterでリプを管理する
 class ReplyMessageAdapter
 //コンストラクタを追加
 //コンストラクタって何？？
@@ -16,8 +17,6 @@ class ReplyMessageAdapter
 //DisplayMessageAdapterクラスにRecyclerView.Adapterを継承する。
     : RecyclerView.Adapter<ReplyMessageAdapter.ViewHolder>(){
 
-    //リスナを格納する変数を定義する(lateinitで初期化を遅らせている)
-    lateinit var listener: OnItemClickListener
 
     //複数のViewを保持するクラスのこと
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -44,12 +43,5 @@ class ReplyMessageAdapter
 
     }
 
-    //インタフェースを作成する
-    interface OnItemClickListener{
-        fun onItemClickListener(view: View, position: Int, clickedText: List<String?>)
-    }
 
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        this.listener = listener
-    }
 }

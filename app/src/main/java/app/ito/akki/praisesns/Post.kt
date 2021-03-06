@@ -7,6 +7,7 @@ data class Post(
     val datetime: Date = Date(),
     val sender: String = "",
     val message: String = "",
-    val reply: ArrayList<Reply?>?
+    val reply: List<Reply> = listOf()
+
 )
 

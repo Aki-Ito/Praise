@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.appcompat.widget.Toolbar;
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     //lateinitで宣言することによってプロパティの初期化を遅らせる
@@ -72,13 +71,9 @@ class MainActivity : AppCompatActivity() {
         //map...keyとvalueを一つのセットにしてデータを管理する
         //他言語ではハッシュや辞書(ディクショナリ)と呼ばれるもの
         //Firestoreでデータを登録する際、Hashを必ず使用する。型が指定されている。
-        val mail = hashMapOf(
-            "datetime" to format.format(date),
-            "sender" to myEmailAddress,
-            "message" to message
-        )
 
-        val mail2 = Post(date, myEmailAddress, message, null)
+
+        val mail2 = Post(date, myEmailAddress, message, arrayListOf())
 
         //collectionにいれたものがコレクションに入る
         db.collection("messages") //usersとかmail
