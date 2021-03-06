@@ -24,7 +24,7 @@ class SentMessagesActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var db: FirebaseFirestore
 
-
+    val postId: String = "id"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sent_messages)
@@ -33,7 +33,7 @@ class SentMessagesActivity : AppCompatActivity() {
 
         //受信ボックスのメッセージを取得してrecyclerViewに反映する
         db = FirebaseFirestore.getInstance()
-        val allMessages = ArrayList<List<String?>>()
+        val allMessages = ArrayList<Post>()
         //名前を入力してコレクションを取得する
         db.collection("messages")
             //orderByを使用することでフィールドを指定し、データの並び替えができる
@@ -51,7 +51,7 @@ class SentMessagesActivity : AppCompatActivity() {
                 for (doc in value!!) {
                     val PostClass = doc.toObject<Post>()
 
-                    allMessages.add(listOf(PostClass.message, PostClass.sender))
+                    allMessages.add(PostClass)
 
                     //Logに出力させることで値が保存されているか確認することができる
                     Log.d("sentMessages", "メッセージは「" + PostClass.message + "」")
@@ -93,11 +93,13 @@ class SentMessagesActivity : AppCompatActivity() {
         viewAdapter.setOnItemClickListener(object : DisplayMessageAdapter.OnItemClickListener {
             override fun onItemClickListener(
                 view: View,
-                position: Int,
-                clickedText: List<String?>
+                postId: String
             ) {
                 val context: Context = view.context
-                context.startActivity(Intent(context, ReplyActivity::class.java))
+                val toReply=Intent(context, ReplyActivity::class.java)
+                toReply.putExtra("key",postId)
+                startActivity(toReply)
+//                context.startActivity(Intent(context, ReplyActivity::class.java))
             }
            }
         )

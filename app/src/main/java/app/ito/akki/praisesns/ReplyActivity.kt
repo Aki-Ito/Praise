@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.messageEdit
 import kotlinx.android.synthetic.main.activity_main.send
@@ -26,6 +27,7 @@ class ReplyActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var db: FirebaseFirestore
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reply)
@@ -42,12 +44,13 @@ class ReplyActivity : AppCompatActivity() {
 
         //受信ボックスのメッセージを取得してrecyclerViewに反映する
         db = FirebaseFirestore.getInstance()
-        val allMessages = ArrayList<List<String?>>()
+        val allMessages = mutableListOf<Reply>()
+        val sentId = intent.getStringExtra("key")
         //名前を入力してコレクションを取得する
-        db.collection("reply")
+        db.collection("messages")
             //orderByを使用することでフィールドを指定し、データの並び替えができる
             //Query.Direction.DESCENDINGによって降順に並び替えることができる
-            .orderBy("datetime", Query.Direction.DESCENDING)
+            .whereEqualTo("id", sentId)
             //以下でFirestoreの更新時の操作を登録
             //.addSnapshotListenerの中に書いた処理がデータベース更新時に自動で処理される
             //データの取得
@@ -56,15 +59,14 @@ class ReplyActivity : AppCompatActivity() {
                     Log.w("Firestore", "Listen failed.", e)
                     return@addSnapshotListener
                 }
-                for (doc in value!!) {
-                    val ReplyClass = doc.toObject<Reply>()
 
-                    allMessages.add(listOf(ReplyClass.message, ReplyClass.sender))
+                val post = value!!.first().toObject<Post>()
 
-                    //Logに出力させることで値が保存されているか確認することができる
-                    Log.d("sentMessages", "メッセージは「" + ReplyClass.message + "」")
-                    Log.d("sender", "senderは「" + ReplyClass.sender + "」")
-                }
+
+
+
+                    allMessages.addAll(post.reply)
+
 
                 //RecyclerViewの更新をする
                 //RecyclerViewに紐づいているallMessagesの更新を表示に反映するために
@@ -100,24 +102,39 @@ class ReplyActivity : AppCompatActivity() {
 //            "message" to message
 //        )
 
+        val sentId = intent.getStringExtra("key")
+
+        // whereでコレクションの中をフィルタできる
+//        db.collection("messages").where()
+
         val mail2 = Reply(date, myEmailAddress, message)
 
-
-
         //collectionにいれたものがコレクションに入る
-        db.collection("reply") //usersとかmail
+        db.collection("messages") //usersとかmail
 
             //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
             //追加する
-            .add(mail2)
+            .whereEqualTo("id", sentId)
+            .get()
             .addOnSuccessListener {
-                //データの保存が成功した際の処理
-                messageEdit.text.clear()
+                val documentId = it.first().id
+                val post = it.first().toObject<Post>()
+                post.reply.add(mail2)
+                db.collection("messages")
+                    .document(documentId)
+                    .set(post)
+                    .addOnSuccessListener {
+                        //データの保存が成功した際の処理
+                        messageEdit.text.clear()
+                    }
+                    .addOnFailureListener { e ->
+                        //データの保存が失敗した際の処理
+                        //致命的なエラーが発生したらログに出力されるようにする。
+                        Log.w("Firestore", "Error writing document", e)
+                    }
             }
-            .addOnFailureListener { e ->
-                //データの保存が失敗した際の処理
-                //致命的なエラーが発生したらログに出力されるようにする。
-                Log.w("Firestore", "Error writing document", e)
-            }
+
+//            .add(mail2)
+
     }
 }

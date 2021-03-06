@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         //Firestoreでデータを登録する際、Hashを必ず使用する。型が指定されている。
 
 
-        val mail2 = Post(date, myEmailAddress, message, arrayListOf())
+        val mail2 = Post( sender = myEmailAddress, message = message, reply = arrayListOf())
 
         //collectionにいれたものがコレクションに入る
         db.collection("messages") //usersとかmail

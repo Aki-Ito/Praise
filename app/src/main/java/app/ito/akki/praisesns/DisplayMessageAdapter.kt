@@ -12,7 +12,7 @@ class DisplayMessageAdapter
     //コンストラクタを追加
     //コンストラクタって何？？
     //クラスを作った時にすぐ代入されるもの
-    (var myDataset: ArrayList<List<String?>>)
+    (var myDataset: ArrayList<Post>)
     //DisplayMessageAdapterクラスにRecyclerView.Adapterを継承する。
     : RecyclerView.Adapter<DisplayMessageAdapter.ViewHolder>(){
 
@@ -40,17 +40,17 @@ class DisplayMessageAdapter
     // iOS: CellForRowAt（データを設定）
     //myDatasetのposition番目の要素をrecyclerViewのviewに表示するコードを書く
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.message.text = myDataset[position][0]
-        holder.sender.text = "from: " + myDataset[position][1]
+        holder.message.text = myDataset[position].message
+        holder.sender.text = "from: " + myDataset[position].sender
 
         holder.container.setOnClickListener {
-            listener.onItemClickListener(it, position, myDataset[position])
+            listener.onItemClickListener(it, myDataset[position].id)
         }
     }
 
     //インタフェースを作成する
     interface OnItemClickListener{
-        fun onItemClickListener(view: View, position: Int, clickedText: List<String?>)
+        fun onItemClickListener(view: View, postId: String)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){
