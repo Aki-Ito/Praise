@@ -12,7 +12,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sent_messages.*
+import kotlinx.android.synthetic.main.mail.*
 
 //自分の受信ボックスにメッセージが追加されたタイミングでメッセージがRecyclerViewに表示されるようにしていく必要がある。
 class SentMessagesActivity : AppCompatActivity() {
@@ -25,6 +27,9 @@ class SentMessagesActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
 
     val postId: String = "id"
+    var thanksButtonCount : Int = 0
+    var goodButtonCount : Int = 0
+    var workedHardCount : Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sent_messages)
@@ -48,6 +53,7 @@ class SentMessagesActivity : AppCompatActivity() {
                     return@addSnapshotListener
                 }
                 //allMessagesから全ての要素を取り除く
+                allMessages.clear()
                 for (doc in value!!) {
                     val PostClass = doc.toObject<Post>()
 
@@ -77,7 +83,9 @@ class SentMessagesActivity : AppCompatActivity() {
 
         //recyclerViewの設定
         viewManager = LinearLayoutManager(this)
-        viewAdapter = DisplayMessageAdapter(allMessages)
+        viewAdapter =
+            DisplayMessageAdapter(allMessages).also { it.onThanksButtonClick = this::onClick }
+                .also { it.onGoodButtonClick = this::onClick2 }.also { it.onWorkedHardButtonClick = this::onClick3 }
         recyclerView = messageInbox.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -96,14 +104,88 @@ class SentMessagesActivity : AppCompatActivity() {
                 postId: String
             ) {
                 val context: Context = view.context
-                val toReply=Intent(context, ReplyActivity::class.java)
-                toReply.putExtra("key",postId)
+                val toReply = Intent(context, ReplyActivity::class.java)
+                toReply.putExtra("key", postId)
                 startActivity(toReply)
-//                context.startActivity(Intent(context, ReplyActivity::class.java))
             }
-           }
+        }
         )
 
 
     }
+
+    fun onClick(view: View): Unit {
+
+        thanksButtonCount = thanksButtonCount + 1
+        db.collection("messages")
+            .whereEqualTo("id", postId)
+            .get()
+            .addOnSuccessListener {
+                val documentId = it.first().id
+                val post = it.first().toObject<Post>()
+                post.thanksButtonCount = thanksButtonCount.toString()
+                db.collection("messages")
+                    .document(documentId)
+                    .set(post)
+                    .addOnSuccessListener {
+                        //データの保存が成功した際の処理
+                        messageEdit.text.clear()
+                    }
+                    .addOnFailureListener { e ->
+                        //データの保存が失敗した際の処理
+                        //致命的なエラーが発生したらログに出力されるようにする。
+                        Log.w("Firestore", "Error writing document", e)
+                    }
+            }
+    }
+
+    fun onClick2(view: View): Unit {
+        goodButtonCount = goodButtonCount + 1
+        db.collection("messages")
+            .whereEqualTo("id", postId)
+            .get()
+            .addOnSuccessListener {
+                val documentId = it.first().id
+                val post = it.first().toObject<Post>()
+                post.goodButtonCount = goodButtonCount.toString()
+                db.collection("messages")
+                    .document(documentId)
+                    .set(post)
+                    .addOnSuccessListener {
+                        //データの保存が成功した際の処理
+                        messageEdit.text.clear()
+                    }
+                    .addOnFailureListener { e ->
+                        //データの保存が失敗した際の処理
+                        //致命的なエラーが発生したらログに出力されるようにする。
+                        Log.w("Firestore", "Error writing document", e)
+                    }
+            }
+    }
+
+    fun onClick3(view: View): Unit{
+        workedHardCount = workedHardCount+1
+        db.collection("messages")
+            .whereEqualTo("id", postId)
+            .get()
+            .addOnSuccessListener {
+                val documentId = it.first().id
+                val post = it.first().toObject<Post>()
+                post.workedHardButtonCount = workedHardCount.toString()
+                db.collection("messages")
+                    .document(documentId)
+                    .set(post)
+                    .addOnSuccessListener {
+                        //データの保存が成功した際の処理
+                        messageEdit.text.clear()
+                    }
+                    .addOnFailureListener { e ->
+                        //データの保存が失敗した際の処理
+                        //致命的なエラーが発生したらログに出力されるようにする。
+                        Log.w("Firestore", "Error writing document", e)
+                    }
+            }
+    }
+
+
 }

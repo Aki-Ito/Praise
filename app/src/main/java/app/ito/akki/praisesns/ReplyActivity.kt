@@ -60,11 +60,9 @@ class ReplyActivity : AppCompatActivity() {
                     return@addSnapshotListener
                 }
 
+
+                allMessages.clear()
                 val post = value!!.first().toObject<Post>()
-
-
-
-
                     allMessages.addAll(post.reply)
 
 
