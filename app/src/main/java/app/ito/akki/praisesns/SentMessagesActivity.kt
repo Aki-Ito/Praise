@@ -14,7 +14,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sent_messages.*
-import kotlinx.android.synthetic.main.mail.*
 
 //自分の受信ボックスにメッセージが追加されたタイミングでメッセージがRecyclerViewに表示されるようにしていく必要がある。
 class SentMessagesActivity : AppCompatActivity() {
@@ -88,8 +87,8 @@ class SentMessagesActivity : AppCompatActivity() {
         //recyclerViewの設定
         viewManager = LinearLayoutManager(this)
         viewAdapter =
-            DisplayMessageAdapter(allMessages).also { it.onThanksButtonClick = this::onClick }
-                .also { it.onGoodButtonClick = this::onClick2 }.also { it.onWorkedHardButtonClick = this::onClick3 }
+            DisplayMessageAdapter(allMessages).also { it.onThanksButtonClick = this::onThanksButtonClick }
+                .also { it.onGoodButtonClick = this::onGoodButtonClick }.also { it.onWorkedHardButtonClick = this::onWorkedHardButtonClick }
         recyclerView = messageInbox.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -118,8 +117,10 @@ class SentMessagesActivity : AppCompatActivity() {
 
     }
 
-    fun onClick(view: View): Unit {
 
+    fun onThanksButtonClick(postId: String){
+
+        Log.d("checkId", postId )
         thanksButtonCount = thanksButtonCount + 1
         db.collection("messages")
             .whereEqualTo("id", postId)
@@ -132,8 +133,7 @@ class SentMessagesActivity : AppCompatActivity() {
                     .document(documentId)
                     .set(post)
                     .addOnSuccessListener {
-                        //データの保存が成功した際の処理
-                        messageEdit.text.clear()
+
                     }
                     .addOnFailureListener { e ->
                         //データの保存が失敗した際の処理
@@ -143,7 +143,7 @@ class SentMessagesActivity : AppCompatActivity() {
             }
     }
 
-    fun onClick2(view: View): Unit {
+    fun onGoodButtonClick(postId: String){
         goodButtonCount = goodButtonCount + 1
         db.collection("messages")
             .whereEqualTo("id", postId)
@@ -156,8 +156,7 @@ class SentMessagesActivity : AppCompatActivity() {
                     .document(documentId)
                     .set(post)
                     .addOnSuccessListener {
-                        //データの保存が成功した際の処理
-                        messageEdit.text.clear()
+
                     }
                     .addOnFailureListener { e ->
                         //データの保存が失敗した際の処理
@@ -167,7 +166,7 @@ class SentMessagesActivity : AppCompatActivity() {
             }
     }
 
-    fun onClick3(view: View): Unit{
+    fun onWorkedHardButtonClick(postId: String){
         workedHardCount = workedHardCount+1
         db.collection("messages")
             .whereEqualTo("id", postId)
@@ -180,8 +179,7 @@ class SentMessagesActivity : AppCompatActivity() {
                     .document(documentId)
                     .set(post)
                     .addOnSuccessListener {
-                        //データの保存が成功した際の処理
-                        messageEdit.text.clear()
+
                     }
                     .addOnFailureListener { e ->
                         //データの保存が失敗した際の処理

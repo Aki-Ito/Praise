@@ -11,17 +11,17 @@ import kotlinx.android.synthetic.main.mail.view.*
 import kotlin.properties.Delegates
 
 class DisplayMessageAdapter
-    //コンストラクタを追加
-    //コンストラクタって何？？
-    //クラスを作った時にすぐ代入されるもの
+//コンストラクタを追加
+//コンストラクタって何？？
+//クラスを作った時にすぐ代入されるもの
     (var myDataset: ArrayList<Post>)
 //    (var myDataset: MutableList<Post>)
-    //DisplayMessageAdapterクラスにRecyclerView.Adapterを継承する。
-    : RecyclerView.Adapter<DisplayMessageAdapter.ViewHolder>(){
+//DisplayMessageAdapterクラスにRecyclerView.Adapterを継承する。
+    : RecyclerView.Adapter<DisplayMessageAdapter.ViewHolder>() {
     //イベント時に実行させたい関数を格納する変数をプロパティとして先に後悔しておく。
-    var onThanksButtonClick : (View) -> Unit by Delegates.notNull()
-    var onGoodButtonClick : (View) -> Unit by Delegates.notNull()
-    var onWorkedHardButtonClick : (View) -> Unit by Delegates.notNull()
+    var onThanksButtonClick: (String) -> Unit by Delegates.notNull()
+    var onGoodButtonClick: (String) -> Unit by Delegates.notNull()
+    var onWorkedHardButtonClick: (String) -> Unit by Delegates.notNull()
 
     //リスナを格納する変数を定義する(lateinitで初期化を遅らせている)
     lateinit var listener: OnItemClickListener
@@ -61,9 +61,15 @@ class DisplayMessageAdapter
         holder.container.setOnClickListener {
             listener.onItemClickListener(it, myDataset[position].id)
         }
-        holder.goodButton.setOnClickListener(onGoodButtonClick)
-        holder.thanksButton.setOnClickListener(onThanksButtonClick)
-        holder.workedHardButton.setOnClickListener(onWorkedHardButtonClick)
+        holder.goodButton.setOnClickListener {
+            onGoodButtonClick(myDataset[position].id)
+        }
+        holder.thanksButton.setOnClickListener {
+            onThanksButtonClick(myDataset[position].id)
+        }
+        holder.workedHardButton.setOnClickListener {
+            onWorkedHardButtonClick(myDataset[position].id)
+        }
         //クリックされた後の表示の処理を行う
         holder.thanksText.text = myDataset[position].thanksButtonCount
         holder.goodText.text = myDataset[position].goodButtonCount
@@ -72,11 +78,11 @@ class DisplayMessageAdapter
     }
 
     //インタフェースを作成する
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClickListener(view: View, postId: String)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener){
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
 }
