@@ -15,6 +15,7 @@ class DisplayMessageAdapter
     //コンストラクタって何？？
     //クラスを作った時にすぐ代入されるもの
     (var myDataset: ArrayList<Post>)
+//    (var myDataset: MutableList<Post>)
     //DisplayMessageAdapterクラスにRecyclerView.Adapterを継承する。
     : RecyclerView.Adapter<DisplayMessageAdapter.ViewHolder>(){
     //イベント時に実行させたい関数を格納する変数をプロパティとして先に後悔しておく。

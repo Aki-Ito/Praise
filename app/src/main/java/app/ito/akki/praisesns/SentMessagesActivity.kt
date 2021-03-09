@@ -39,6 +39,7 @@ class SentMessagesActivity : AppCompatActivity() {
         //受信ボックスのメッセージを取得してrecyclerViewに反映する
         db = FirebaseFirestore.getInstance()
         val allMessages = ArrayList<Post>()
+//        val allMessages = mutableListOf<Post>()
         //名前を入力してコレクションを取得する
         db.collection("messages")
             //orderByを使用することでフィールドを指定し、データの並び替えができる
@@ -63,6 +64,9 @@ class SentMessagesActivity : AppCompatActivity() {
                     Log.d("sentMessages", "メッセージは「" + PostClass.message + "」")
                     Log.d("sender", "senderは「" + PostClass.sender + "」")
                 }
+//                allMessages.clear()
+//                val post = value!!.first().toObject<Post>()
+//                allMessages.add(post)
 
                 //RecyclerViewの更新をする
                 //RecyclerViewに紐づいているallMessagesの更新を表示に反映するために
