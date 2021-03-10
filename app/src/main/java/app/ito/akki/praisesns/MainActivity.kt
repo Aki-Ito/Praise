@@ -64,9 +64,6 @@ class MainActivity : AppCompatActivity() {
     fun sendMessage(message: String) {
         val db = FirebaseFirestore.getInstance()
 
-        //現在時刻の取得
-        val date = Date()
-        val format = SimpleDateFormat("yyyy/MM/dd HH::mm::ss")
 
         //map...keyとvalueを一つのセットにしてデータを管理する
         //他言語ではハッシュや辞書(ディクショナリ)と呼ばれるもの
@@ -93,6 +90,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-//今現在わからないこと
-//自分のメールアドレスの取得方法がいまいち分からない
-//documentとaddの使い分け方法

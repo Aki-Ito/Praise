@@ -70,10 +70,15 @@ class DisplayMessageAdapter
         holder.workedHardButton.setOnClickListener {
             onWorkedHardButtonClick(myDataset[position].id)
         }
+
+
+        val thanksCountToString: String = myDataset[position].thanksButtonCount.toString()
+        val goodCountToString: String = myDataset[position].goodButtonCount.toString()
+        val workedCountToString: String = myDataset[position].workedHardButtonCount.toString()
         //クリックされた後の表示の処理を行う
-        holder.thanksText.text = myDataset[position].thanksButtonCount
-        holder.goodText.text = myDataset[position].goodButtonCount
-        holder.workedHardText.text = myDataset[position].workedHardButtonCount
+        holder.thanksText.text = thanksCountToString
+        holder.goodText.text = goodCountToString
+        holder.workedHardText.text = workedCountToString
 
     }
 

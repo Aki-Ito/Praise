@@ -26,9 +26,9 @@ class SentMessagesActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
 
     val postId: String = "id"
-    var thanksButtonCount : Int = 0
-    var goodButtonCount : Int = 0
-    var workedHardCount : Int = 0
+    var thanksButtonCount: Int = 0
+    var goodButtonCount: Int = 0
+    var workedHardCount: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sent_messages)
@@ -87,8 +87,11 @@ class SentMessagesActivity : AppCompatActivity() {
         //recyclerViewの設定
         viewManager = LinearLayoutManager(this)
         viewAdapter =
-            DisplayMessageAdapter(allMessages).also { it.onThanksButtonClick = this::onThanksButtonClick }
-                .also { it.onGoodButtonClick = this::onGoodButtonClick }.also { it.onWorkedHardButtonClick = this::onWorkedHardButtonClick }
+            DisplayMessageAdapter(allMessages).also {
+                it.onThanksButtonClick = this::onThanksButtonClick
+            }
+                .also { it.onGoodButtonClick = this::onGoodButtonClick }
+                .also { it.onWorkedHardButtonClick = this::onWorkedHardButtonClick }
         recyclerView = messageInbox.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -118,17 +121,16 @@ class SentMessagesActivity : AppCompatActivity() {
     }
 
 
-    fun onThanksButtonClick(postId: String){
+    fun onThanksButtonClick(postId: String) {
 
-        Log.d("checkId", postId )
-        thanksButtonCount = thanksButtonCount + 1
+        Log.d("checkId", postId)
         db.collection("messages")
             .whereEqualTo("id", postId)
             .get()
             .addOnSuccessListener {
                 val documentId = it.first().id
                 val post = it.first().toObject<Post>()
-                post.thanksButtonCount = thanksButtonCount.toString()
+                post.thanksButtonCount = post.thanksButtonCount + 1
                 db.collection("messages")
                     .document(documentId)
                     .set(post)
@@ -143,7 +145,7 @@ class SentMessagesActivity : AppCompatActivity() {
             }
     }
 
-    fun onGoodButtonClick(postId: String){
+    fun onGoodButtonClick(postId: String) {
         goodButtonCount = goodButtonCount + 1
         db.collection("messages")
             .whereEqualTo("id", postId)
@@ -151,7 +153,7 @@ class SentMessagesActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 val documentId = it.first().id
                 val post = it.first().toObject<Post>()
-                post.goodButtonCount = goodButtonCount.toString()
+                post.goodButtonCount = post.goodButtonCount + 1
                 db.collection("messages")
                     .document(documentId)
                     .set(post)
@@ -166,15 +168,15 @@ class SentMessagesActivity : AppCompatActivity() {
             }
     }
 
-    fun onWorkedHardButtonClick(postId: String){
-        workedHardCount = workedHardCount+1
+    fun onWorkedHardButtonClick(postId: String) {
+        workedHardCount = workedHardCount + 1
         db.collection("messages")
             .whereEqualTo("id", postId)
             .get()
             .addOnSuccessListener {
                 val documentId = it.first().id
                 val post = it.first().toObject<Post>()
-                post.workedHardButtonCount = workedHardCount.toString()
+                post.workedHardButtonCount = post.workedHardButtonCount + 1
                 db.collection("messages")
                     .document(documentId)
                     .set(post)

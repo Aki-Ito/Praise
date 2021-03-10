@@ -11,9 +11,9 @@ data class Post(
     val sender: String = "",
     val message: String = "",
     val reply: MutableList<Reply> = mutableListOf(),
-    var thanksButtonCount: String = "",
-    var goodButtonCount: String = "",
-    var workedHardButtonCount: String = ""
+    var thanksButtonCount: Int = 0,
+    var goodButtonCount: Int = 0,
+    var workedHardButtonCount: Int = 0
 )
 
 
