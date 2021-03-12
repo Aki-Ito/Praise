@@ -26,9 +26,6 @@ class SentMessagesActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
 
     val postId: String = "id"
-    var thanksButtonCount: Int = 0
-    var goodButtonCount: Int = 0
-    var workedHardCount: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sent_messages)
@@ -146,7 +143,6 @@ class SentMessagesActivity : AppCompatActivity() {
     }
 
     fun onGoodButtonClick(postId: String) {
-        goodButtonCount = goodButtonCount + 1
         db.collection("messages")
             .whereEqualTo("id", postId)
             .get()
@@ -169,7 +165,6 @@ class SentMessagesActivity : AppCompatActivity() {
     }
 
     fun onWorkedHardButtonClick(postId: String) {
-        workedHardCount = workedHardCount + 1
         db.collection("messages")
             .whereEqualTo("id", postId)
             .get()
