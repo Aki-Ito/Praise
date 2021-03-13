@@ -34,7 +34,7 @@ class MakeGroupsActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         val makeGroups = Groups(groupName = Name, password = number)
-        db.collection("group")
+        db.collection("groups")
             .add(makeGroups)
             .addOnSuccessListener {
                 titleTextView.text = "IDが発行されました。"

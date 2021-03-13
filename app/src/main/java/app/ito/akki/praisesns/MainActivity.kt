@@ -9,8 +9,6 @@ import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
-import java.text.SimpleDateFormat
-import java.util.*
 import androidx.appcompat.widget.Toolbar;
 
 class MainActivity : AppCompatActivity() {
@@ -25,19 +23,19 @@ class MainActivity : AppCompatActivity() {
         //ツールバーに戻るボタンを設置する
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
+        val groupSentId = intent.getStringExtra("ID2")
 
         //自分のメールアドレスが取得できるようにする
         myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
 
         //自分のメールアドレスが表示されるようにする
         myId.setText(myEmailAddress)
-        //checkIdアクティビティから送られたパスワード
-        val sentPassword = intent.getStringExtra("password")
+
 
         //送信ボタンを押した時の設定
         send.setOnClickListener {
-            if (sentPassword != null) {
-                sendMessage(messageEdit.text.toString(),sentPassword)
+            if (groupSentId != null) {
+                sendMessage(messageEdit.text.toString(),groupSentId)
             }
         }
     }
@@ -65,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //メッセージをデータベースに格納する
-    fun sendMessage(message: String, password: String) {
+    fun sendMessage(message: String, groupSentId: String) {
         val db = FirebaseFirestore.getInstance()
 
 
@@ -74,11 +72,13 @@ class MainActivity : AppCompatActivity() {
         //Firestoreでデータを登録する際、Hashを必ず使用する。型が指定されている。
 
 
-        val mail2 = Post( sender = myEmailAddress, message = message, reply = arrayListOf())
+        val mail2 = Post( sender = myEmailAddress, message = message)
 
         //collectionにいれたものがコレクションに入る
 
-        db.collection("messages")
+        db.collection("groups")
+            .document(groupSentId)
+            .collection("messages")
             //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
             //追加する
             .add(mail2)
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 //データの保存が失敗した際の処理
                 //致命的なエラーが発生したらログに出力されるようにする。
-                Log.w("Firestore", "Error writing document", e)
+                Log.e("Firestore", "Error writing document", e)
             }
     }
 }

@@ -34,9 +34,11 @@ class ReplyActivity : AppCompatActivity() {
 
         myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
 
+        val sentPostId = intent.getStringExtra("postKey")
+        val sentGroupId = intent.getStringExtra("groupKey")
         send.setOnClickListener {
             replyMessage(
-                messageEdit.text.toString()
+                messageEdit.text.toString(), sentGroupId!!, sentPostId!!
             )
         }
 
@@ -45,12 +47,14 @@ class ReplyActivity : AppCompatActivity() {
         //受信ボックスのメッセージを取得してrecyclerViewに反映する
         db = FirebaseFirestore.getInstance()
         val allMessages = mutableListOf<Reply>()
-        val sentId = intent.getStringExtra("key")
         //名前を入力してコレクションを取得する
-        db.collection("messages")
+        db.collection("groups")
             //orderByを使用することでフィールドを指定し、データの並び替えができる
             //Query.Direction.DESCENDINGによって降順に並び替えることができる
-            .whereEqualTo("id", sentId)
+            .document(sentGroupId!!)
+            .collection("messages")
+            .document(sentPostId!!)
+            .collection("replies")
             //以下でFirestoreの更新時の操作を登録
             //.addSnapshotListenerの中に書いた処理がデータベース更新時に自動で処理される
             //データの取得
@@ -62,8 +66,10 @@ class ReplyActivity : AppCompatActivity() {
 
 
                 allMessages.clear()
-                val post = value!!.first().toObject<Post>()
-                    allMessages.addAll(post.reply)
+                for (doc in value!!) {
+                    val reply = doc.toObject<Reply>()
+                    allMessages.add(reply)
+                }
 
 
                 //RecyclerViewの更新をする
@@ -85,7 +91,7 @@ class ReplyActivity : AppCompatActivity() {
     }
 
     //メッセージをデータベースに格納する
-    fun replyMessage(message: String) {
+    fun replyMessage(message: String, sentGroupId: String, sentPostId: String) {
         val db = FirebaseFirestore.getInstance()
 
         //現在時刻の取得
@@ -105,31 +111,26 @@ class ReplyActivity : AppCompatActivity() {
         // whereでコレクションの中をフィルタできる
 //        db.collection("messages").where()
 
-        val mail2 = Reply(date, myEmailAddress, message)
+        val mail2 = Reply(datetime = date, sender = myEmailAddress, message = message)
+
 
         //collectionにいれたものがコレクションに入る
-        db.collection("messages") //usersとかmail
-
-            //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
-            //追加する
-            .whereEqualTo("id", sentId)
-            .get()
+        db.collection("groups") //usersとかmail
+            .document(sentGroupId)
+            .collection("messages")
+            .document(sentPostId)
+            .collection("replies")
+            .add(mail2)
             .addOnSuccessListener {
-                val documentId = it.first().id
-                val post = it.first().toObject<Post>()
-                post.reply.add(mail2)
-                db.collection("messages")
-                    .document(documentId)
-                    .set(post)
-                    .addOnSuccessListener {
-                        //データの保存が成功した際の処理
-                        messageEdit.text.clear()
-                    }
-                    .addOnFailureListener { e ->
-                        //データの保存が失敗した際の処理
-                        //致命的なエラーが発生したらログに出力されるようにする。
-                        Log.w("Firestore", "Error writing document", e)
-                    }
+                //データの保存が成功した際の処理
+                messageEdit.text.clear()
+            }
+            .addOnFailureListener { e ->
+                //データの保存が失敗した際の処理
+                //致命的なエラーが発生したらログに出力されるようにする。
+                Log.e("Firestore", "Error writing document", e)
             }
     }
+
+
 }

@@ -5,7 +5,7 @@ import java.util.*
 
 data class Groups (
     @DocumentId
-    var documentID: String,
+    var documentID: String = "",
     var groupName: String = "",
     var password: String = "00000000"
 )

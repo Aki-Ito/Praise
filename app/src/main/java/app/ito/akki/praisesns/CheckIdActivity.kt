@@ -19,18 +19,19 @@ class CheckIdActivity : AppCompatActivity() {
         val sentId = intent.getStringExtra("key")
         button.setOnClickListener {
             db = FirebaseFirestore.getInstance()
-            db.collection("group")
-                .whereEqualTo("id",sentId)
+            db.collection("groups")
+                .document(sentId!!)
                 .addSnapshotListener { value, e ->
                     if (e != null) {
                         Log.w("Firestore", "Listen failed.", e)
                         return@addSnapshotListener
                     }
-                    val groupId = value!!.last().toObject<Groups>()
-                    if(groupId.password == checkIdEditText.text.toString()){
+                    val group = value!!.toObject<Groups>()
+                    if(group!!.password == checkIdEditText.text.toString()){
                         val toSentMessages = Intent(this, SentMessagesActivity::class.java)
+                        toSentMessages.putExtra("ID", sentId)
                         startActivity(toSentMessages)
-                        toSentMessages.putExtra("password",checkIdEditText.text.toString())
+
                     }
                 }
         }

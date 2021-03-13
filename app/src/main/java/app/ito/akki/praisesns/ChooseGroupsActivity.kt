@@ -31,7 +31,7 @@ class ChooseGroupsActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         var allMessages = mutableListOf<Groups>()
         //名前を入力してコレクションを取得する
-        db.collection("group")
+        db.collection("groups")
             //orderByを使用することでフィールドを指定し、データの並び替えができる
             //Query.Direction.DESCENDINGによって降順に並び替えることができる
             //以下でFirestoreの更新時の操作を登録
@@ -82,11 +82,11 @@ class ChooseGroupsActivity : AppCompatActivity() {
         viewAdapter.setOnItemClickListener(object : DisplayGroupsAdapter.OnItemClickListener {
             override fun onItemClickListener(
                 view: View,
-                postId: String
+                group: Groups
             ) {
                 val context: Context = view.context
                 val toCheck = Intent(context, CheckIdActivity::class.java)
-                toCheck.putExtra("key", postId)
+                toCheck.putExtra("key", group.documentID)
                 startActivity(toCheck)
             }
         }

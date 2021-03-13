@@ -43,7 +43,7 @@ class DisplayGroupsAdapter
 
         holder.name.text = myDataset[position].groupName
         holder.container.setOnClickListener{
-            listener.onItemClickListener(it, myDataset[position].id)
+            listener.onItemClickListener(it, myDataset[position])
         }
 
     }
@@ -51,7 +51,7 @@ class DisplayGroupsAdapter
 
     //インタフェースを作成する
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, postId: String)
+        fun onItemClickListener(view: View, group: Groups)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

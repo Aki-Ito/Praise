@@ -32,12 +32,14 @@ class SentMessagesActivity : AppCompatActivity() {
 
         myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
 
+        val sentId = intent.getStringExtra("ID")
         //受信ボックスのメッセージを取得してrecyclerViewに反映する
         db = FirebaseFirestore.getInstance()
         val allMessages = ArrayList<Post>()
-//        val allMessages = mutableListOf<Post>()
         //名前を入力してコレクションを取得する
-        db.collection("messages")
+        db.collection("groups")
+            .document(sentId!!)
+            .collection("messages")
             //orderByを使用することでフィールドを指定し、データの並び替えができる
             //Query.Direction.DESCENDINGによって降順に並び替えることができる
             .orderBy("datetime", Query.Direction.DESCENDING)
@@ -97,6 +99,7 @@ class SentMessagesActivity : AppCompatActivity() {
 
         post.setOnClickListener {
             val toMain = Intent(this, MainActivity::class.java)
+            toMain.putExtra("ID2", sentId)
             startActivity(toMain)
         }
 
@@ -108,7 +111,8 @@ class SentMessagesActivity : AppCompatActivity() {
             ) {
                 val context: Context = view.context
                 val toReply = Intent(context, ReplyActivity::class.java)
-                toReply.putExtra("key", postId)
+                toReply.putExtra("postKey", postId)
+                toReply.putExtra("groupKey", sentId)
                 startActivity(toReply)
             }
         }
