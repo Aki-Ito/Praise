@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.EditorInfo
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_make_groups.*
 import kotlin.random.Random
@@ -34,7 +33,7 @@ class MakeGroupsActivity : AppCompatActivity() {
     fun makeGroupID(Name: String, number: String){
         db = FirebaseFirestore.getInstance()
 
-        val makeGroups = Groups(groupName = Name, groupID = number)
+        val makeGroups = Groups(groupName = Name, password = number)
         db.collection("group")
             .add(makeGroups)
             .addOnSuccessListener {
@@ -49,7 +48,7 @@ class MakeGroupsActivity : AppCompatActivity() {
 
     fun createPassword(){
         //８桁パスワードの作成
-        for (i in 0..8){
+        for (i in 0..7){
             var randomIndex = Random.nextInt(NumberList.length)
             password += NumberList[randomIndex]
         }

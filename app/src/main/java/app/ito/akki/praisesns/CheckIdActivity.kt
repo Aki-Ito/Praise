@@ -26,10 +26,11 @@ class CheckIdActivity : AppCompatActivity() {
                         Log.w("Firestore", "Listen failed.", e)
                         return@addSnapshotListener
                     }
-                    val groupId = value!!.first().toObject<Groups>()
-                    if(groupId.groupID == checkIdEditText.text.toString()){
+                    val groupId = value!!.last().toObject<Groups>()
+                    if(groupId.password == checkIdEditText.text.toString()){
                         val toSentMessages = Intent(this, SentMessagesActivity::class.java)
                         startActivity(toSentMessages)
+                        toSentMessages.putExtra("password",checkIdEditText.text.toString())
                     }
                 }
         }

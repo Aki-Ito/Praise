@@ -31,10 +31,14 @@ class MainActivity : AppCompatActivity() {
 
         //自分のメールアドレスが表示されるようにする
         myId.setText(myEmailAddress)
+        //checkIdアクティビティから送られたパスワード
+        val sentPassword = intent.getStringExtra("password")
 
         //送信ボタンを押した時の設定
         send.setOnClickListener {
-            sendMessage(messageEdit.text.toString())
+            if (sentPassword != null) {
+                sendMessage(messageEdit.text.toString(),sentPassword)
+            }
         }
     }
 
@@ -61,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //メッセージをデータベースに格納する
-    fun sendMessage(message: String) {
+    fun sendMessage(message: String, password: String) {
         val db = FirebaseFirestore.getInstance()
 
 
@@ -73,8 +77,9 @@ class MainActivity : AppCompatActivity() {
         val mail2 = Post( sender = myEmailAddress, message = message, reply = arrayListOf())
 
         //collectionにいれたものがコレクションに入る
-        db.collection("messages") //usersとかmail
-
+        db.collection("group") //usersとかmail
+            .document(password)
+            .collection("messages")
             //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
             //追加する
             .add(mail2)

@@ -20,8 +20,10 @@
 
     <EditText
         android:id="@+id/messageEdit"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="25dp"
         android:ems="10"
         android:hint="返信を投稿しよう"
@@ -32,8 +34,10 @@
 
     <Button
         android:id="@+id/send"
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="68dp"
         android:background="@drawable/background_circle"
         android:text="送信"
