@@ -131,8 +131,5 @@ class ReplyActivity : AppCompatActivity() {
                         Log.w("Firestore", "Error writing document", e)
                     }
             }
-
-//            .add(mail2)
-
     }
 }

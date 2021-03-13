@@ -77,9 +77,8 @@ class MainActivity : AppCompatActivity() {
         val mail2 = Post( sender = myEmailAddress, message = message, reply = arrayListOf())
 
         //collectionにいれたものがコレクションに入る
-        db.collection("group") //usersとかmail
-            .document(password)
-            .collection("messages")
+
+        db.collection("messages")
             //add()メソッドを用いると勝手に一意なIDがドキュメント名に対して作成される
             //追加する
             .add(mail2)

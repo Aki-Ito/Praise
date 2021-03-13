@@ -1,9 +1,11 @@
 package app.ito.akki.praisesns
 
+import com.google.firebase.firestore.DocumentId
 import java.util.*
 
 data class Groups (
-    var id: String = UUID.randomUUID().toString(),
+    @DocumentId
+    var documentID: String,
     var groupName: String = "",
     var password: String = "00000000"
 )
