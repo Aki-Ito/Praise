@@ -23,6 +23,7 @@ class DisplayGroupsAdapter
     //複数のViewを保持するクラスのこと
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.groupNameTextView
+        val datetime: TextView = view.dateTextView
         val container: CardView = view.cardView
     }
 
@@ -41,6 +42,8 @@ class DisplayGroupsAdapter
     //myDatasetのposition番目の要素をrecyclerViewのviewに表示するコードを書く
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        val dateToString: String = myDataset[position].datetime.toString()
+        holder.datetime.text = dateToString
         holder.name.text = myDataset[position].groupName
         holder.container.setOnClickListener{
             listener.onItemClickListener(it, myDataset[position])

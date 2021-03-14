@@ -18,10 +18,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val mainToolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(mainToolbar)
-        //ツールバーに戻るボタンを設置する
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
+//        val mainToolbar = findViewById<Toolbar>(R.id.toolbar)
+//        setSupportActionBar(mainToolbar)
+//        //ツールバーに戻るボタンを設置する
+//        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        // アクションバーにツールバーをセット
+        setSupportActionBar(toolbar)
+        // ツールバーに戻るボタンを設置
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val groupSentId = intent.getStringExtra("ID2")
 
@@ -39,28 +44,37 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val menuInflater = menuInflater
-        menuInflater.inflate(R.menu.menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.email -> {
-                val toSentMessagesActivity = Intent(this, SentMessagesActivity::class.java)
-                startActivity(toSentMessagesActivity)
-                true
-            }
-            R.id.logout -> {
-                finish()
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
+        // android.R.id.home に戻るボタンを押した時のidが取得できる
+        if (item.itemId == android.R.id.home) {
+            // 今回はActivityを終了させている
+            finish()
         }
+        return super.onOptionsItemSelected(item)
     }
+
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        val menuInflater = menuInflater
+//        menuInflater.inflate(R.menu.menu, menu)
+//        return super.onCreateOptionsMenu(menu)
+//    }
+
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.email -> {
+//                val toSentMessagesActivity = Intent(this, SentMessagesActivity::class.java)
+//                startActivity(toSentMessagesActivity)
+//                true
+//            }
+//            R.id.logout -> {
+//                finish()
+//                true
+//            }
+//
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
+
 
     //メッセージをデータベースに格納する
     fun sendMessage(message: String, groupSentId: String) {

@@ -3,6 +3,8 @@ package app.ito.akki.praisesns
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -31,6 +33,12 @@ class ReplyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reply)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        // アクションバーにツールバーをセット
+        setSupportActionBar(toolbar)
+        // ツールバーに戻るボタンを設置
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
 
@@ -88,6 +96,15 @@ class ReplyActivity : AppCompatActivity() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // android.R.id.home に戻るボタンを押した時のidが取得できる
+        if (item.itemId == android.R.id.home) {
+            // 今回はActivityを終了させている
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     //メッセージをデータベースに格納する

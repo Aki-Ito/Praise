@@ -42,8 +42,8 @@ class LoginActivity : AppCompatActivity() {
                             baseContext, "SignUp 成功",
                             Toast.LENGTH_SHORT
                         ).show()
-                        val toMainActivity = Intent(this, MainActivity::class.java)
-                        startActivity(toMainActivity)
+                        val toChooseGroups = Intent(this, ChooseGroupsActivity::class.java)
+                        startActivity(toChooseGroups)
 
                     } else {
                         Toast.makeText(
@@ -67,8 +67,8 @@ class LoginActivity : AppCompatActivity() {
                             baseContext, "Login 成功",
                             Toast.LENGTH_SHORT
                         ).show()
-                        val toMainActivity = Intent(this, MainActivity::class.java)
-                        startActivity(toMainActivity)
+                        val toChooseGroups = Intent(this, ChooseGroupsActivity::class.java)
+                        startActivity(toChooseGroups)
                     } else {
                         Toast.makeText(
                             baseContext, "Login 失敗",

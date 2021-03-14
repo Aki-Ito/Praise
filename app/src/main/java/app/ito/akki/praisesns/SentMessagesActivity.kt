@@ -37,42 +37,44 @@ class SentMessagesActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         val allMessages = ArrayList<Post>()
         //名前を入力してコレクションを取得する
-        db.collection("groups")
-            .document(sentId!!)
-            .collection("messages")
-            //orderByを使用することでフィールドを指定し、データの並び替えができる
-            //Query.Direction.DESCENDINGによって降順に並び替えることができる
-            .orderBy("datetime", Query.Direction.DESCENDING)
-            //以下でFirestoreの更新時の操作を登録
-            //.addSnapshotListenerの中に書いた処理がデータベース更新時に自動で処理される
-            //データの取得
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("Firestore", "Listen failed.", e)
-                    return@addSnapshotListener
+        if (sentId != null) {
+            db.collection("groups")
+                .document(sentId)
+                .collection("messages")
+                //orderByを使用することでフィールドを指定し、データの並び替えができる
+                //Query.Direction.DESCENDINGによって降順に並び替えることができる
+                .orderBy("datetime", Query.Direction.DESCENDING)
+                //以下でFirestoreの更新時の操作を登録
+                //.addSnapshotListenerの中に書いた処理がデータベース更新時に自動で処理される
+                //データの取得
+                .addSnapshotListener { value, e ->
+                    if (e != null) {
+                        Log.w("Firestore", "Listen failed.", e)
+                        return@addSnapshotListener
+                    }
+                    //allMessagesから全ての要素を取り除く
+                    allMessages.clear()
+                    for (doc in value!!) {
+                        val PostClass = doc.toObject<Post>()
+
+                        allMessages.add(PostClass)
+
+                        //Logに出力させることで値が保存されているか確認することができる
+                        Log.d("sentMessages", "メッセージは「" + PostClass.message + "」")
+                        Log.d("sender", "senderは「" + PostClass.sender + "」")
+                    }
+    //                allMessages.clear()
+    //                val post = value!!.first().toObject<Post>()
+    //                allMessages.add(post)
+
+                    //RecyclerViewの更新をする
+                    //RecyclerViewに紐づいているallMessagesの更新を表示に反映するために
+                    //notifyDataSetChanged()を使用する
+                    // iOSでいうtableView.reloadData()
+                    viewAdapter.myDataset = allMessages
+                    viewAdapter.notifyDataSetChanged()
                 }
-                //allMessagesから全ての要素を取り除く
-                allMessages.clear()
-                for (doc in value!!) {
-                    val PostClass = doc.toObject<Post>()
-
-                    allMessages.add(PostClass)
-
-                    //Logに出力させることで値が保存されているか確認することができる
-                    Log.d("sentMessages", "メッセージは「" + PostClass.message + "」")
-                    Log.d("sender", "senderは「" + PostClass.sender + "」")
-                }
-//                allMessages.clear()
-//                val post = value!!.first().toObject<Post>()
-//                allMessages.add(post)
-
-                //RecyclerViewの更新をする
-                //RecyclerViewに紐づいているallMessagesの更新を表示に反映するために
-                //notifyDataSetChanged()を使用する
-                // iOSでいうtableView.reloadData()
-                viewAdapter.myDataset = allMessages
-                viewAdapter.notifyDataSetChanged()
-            }
+        }
         //.get()
 //            .addOnSuccessListener {result ->
 //                for (document in result){
@@ -123,70 +125,49 @@ class SentMessagesActivity : AppCompatActivity() {
 
 
     fun onThanksButtonClick(postId: String) {
-
+        val sentId = intent.getStringExtra("ID")
         Log.d("checkId", postId)
-        db.collection("messages")
-            .whereEqualTo("id", postId)
+        db.collection("groups")
+            .document(sentId!!)  //sentIdはグループのID
+            .collection("messages")
+            .document(postId)
             .get()
             .addOnSuccessListener {
-                val documentId = it.first().id
-                val post = it.first().toObject<Post>()
+                val post = it.toObject<Post>()!!
                 post.thanksButtonCount = post.thanksButtonCount + 1
-                db.collection("messages")
-                    .document(documentId)
-                    .set(post)
-                    .addOnSuccessListener {
-
-                    }
-                    .addOnFailureListener { e ->
-                        //データの保存が失敗した際の処理
-                        //致命的なエラーが発生したらログに出力されるようにする。
-                        Log.w("Firestore", "Error writing document", e)
-                    }
+                it.reference.set(post)
             }
     }
 
     fun onGoodButtonClick(postId: String) {
         db.collection("messages")
-            .whereEqualTo("id", postId)
+        val sentId = intent.getStringExtra("ID")
+        Log.d("checkId", postId)
+        db.collection("groups")
+            .document(sentId!!)  //sentIdはグループのID
+            .collection("messages")
+            .document(postId)
             .get()
             .addOnSuccessListener {
-                val documentId = it.first().id
-                val post = it.first().toObject<Post>()
+                val post = it.toObject<Post>()!!
                 post.goodButtonCount = post.goodButtonCount + 1
-                db.collection("messages")
-                    .document(documentId)
-                    .set(post)
-                    .addOnSuccessListener {
-
-                    }
-                    .addOnFailureListener { e ->
-                        //データの保存が失敗した際の処理
-                        //致命的なエラーが発生したらログに出力されるようにする。
-                        Log.w("Firestore", "Error writing document", e)
-                    }
+                it.reference.set(post)
             }
     }
 
     fun onWorkedHardButtonClick(postId: String) {
         db.collection("messages")
-            .whereEqualTo("id", postId)
+        val sentId = intent.getStringExtra("ID")
+        Log.d("checkId", postId)
+        db.collection("groups")
+            .document(sentId!!)  //sentIdはグループのID
+            .collection("messages")
+            .document(postId)
             .get()
             .addOnSuccessListener {
-                val documentId = it.first().id
-                val post = it.first().toObject<Post>()
+                val post = it.toObject<Post>()!!
                 post.workedHardButtonCount = post.workedHardButtonCount + 1
-                db.collection("messages")
-                    .document(documentId)
-                    .set(post)
-                    .addOnSuccessListener {
-
-                    }
-                    .addOnFailureListener { e ->
-                        //データの保存が失敗した際の処理
-                        //致命的なエラーが発生したらログに出力されるようにする。
-                        Log.w("Firestore", "Error writing document", e)
-                    }
+                it.reference.set(post)
             }
     }
 
