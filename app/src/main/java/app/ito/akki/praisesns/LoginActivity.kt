@@ -1,26 +1,28 @@
 package app.ito.akki.praisesns
 
 import android.content.Intent
-import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 //ログイン機能の実装 Firebase Auth
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         //FirebaseAuthオブジェクトの共有インスタンスを取得
         auth = FirebaseAuth.getInstance()
+        //FirebaseFirestoreの設定
+        db = FirebaseFirestore.getInstance()
 
 
         val buttonSignup = findViewById<Button>(R.id.SignUpButton)
@@ -31,17 +33,34 @@ class LoginActivity : AppCompatActivity() {
             val emailEditText = findViewById<TextInputEditText>(R.id.emailEdit)
             val emailText = emailEditText.text.toString()
             val passEditText = findViewById<TextInputEditText>(R.id.passEdit)
-            val passWordText = passEditText.text.toString()
+            val passText = passEditText.text.toString()
+            val userNameEditText = findViewById<TextInputEditText>(R.id.userNameEdit)
+            val userNameText = userNameEditText.text.toString()
 
             //メールアドレスとパスワードを使い、新規登録をする
             //新規登録する際にはcreateUserWithEmailAndPasswordを用いる
-            auth.createUserWithEmailAndPassword(emailText, passWordText)
+            auth.createUserWithEmailAndPassword(emailText, passText)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(
                             baseContext, "SignUp 成功",
                             Toast.LENGTH_SHORT
                         ).show()
+                        //ユーザのプロフィールを取得
+                        val userInfo = UserInformation(userName = userNameText)
+                        var myUid = FirebaseAuth.getInstance().currentUser?.uid
+                        db.collection("user")
+                            .document(myUid!!)
+                            .set(userInfo)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    baseContext, "SignUp 成功",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("username",userInfo.userName)
+                            }
+
+
                         val toChooseGroups = Intent(this, ChooseGroupsActivity::class.java)
                         startActivity(toChooseGroups)
 
@@ -52,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
+
         }
 
         buttonLogin.setOnClickListener {

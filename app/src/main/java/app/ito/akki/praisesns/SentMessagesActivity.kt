@@ -63,9 +63,7 @@ class SentMessagesActivity : AppCompatActivity() {
                         Log.d("sentMessages", "メッセージは「" + PostClass.message + "」")
                         Log.d("sender", "senderは「" + PostClass.sender + "」")
                     }
-    //                allMessages.clear()
-    //                val post = value!!.first().toObject<Post>()
-    //                allMessages.add(post)
+
 
                     //RecyclerViewの更新をする
                     //RecyclerViewに紐づいているallMessagesの更新を表示に反映するために
@@ -75,22 +73,13 @@ class SentMessagesActivity : AppCompatActivity() {
                     viewAdapter.notifyDataSetChanged()
                 }
         }
-        //.get()
-//            .addOnSuccessListener {result ->
-//                for (document in result){
-//                    val message = document.getString("message")
-//                    val sender = document.getString("sender")
-//                    //配列に要素を追加できるようにする
-//                    allMessages.add(listOf(message, sender))
-//                }
-//            }
+
 
         //recyclerViewの設定
         viewManager = LinearLayoutManager(this)
         viewAdapter =
-            DisplayMessageAdapter(allMessages).also {
-                it.onThanksButtonClick = this::onThanksButtonClick
-            }
+            DisplayMessageAdapter(allMessages)
+                .also { it.onThanksButtonClick = this::onThanksButtonClick }
                 .also { it.onGoodButtonClick = this::onGoodButtonClick }
                 .also { it.onWorkedHardButtonClick = this::onWorkedHardButtonClick }
         recyclerView = messageInbox.apply {

@@ -21,7 +21,9 @@ class MakeGroupsActivity : AppCompatActivity() {
 
         confirmName.setOnClickListener {
             createPassword()
-            makeGroupID(groupName.text.toString(), password)
+            Log.d("password", password)
+//            makeGroupID(groupName.text.toString(), password)
+            makeGroupID(groupName.text.toString(),password)
         }
 
         toDisplayGroups.setOnClickListener {
@@ -48,8 +50,8 @@ class MakeGroupsActivity : AppCompatActivity() {
     }
 
     fun createPassword(){
-        //８桁パスワードの作成
-        for (i in 0..7){
+        //4桁パスワードの作成
+        for (i in 0..3){
             var randomIndex = Random.nextInt(NumberList.length)
             password += NumberList[randomIndex]
         }

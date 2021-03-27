@@ -24,6 +24,7 @@ import java.util.*
 class ReplyActivity : AppCompatActivity() {
 
     private lateinit var myEmailAddress: String
+    private lateinit var name: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: ReplyMessageAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -51,6 +52,8 @@ class ReplyActivity : AppCompatActivity() {
         }
 
         myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
+        //予めデータを挿入しておかないとクラッシュする要因となる
+        name = ""
 
         //受信ボックスのメッセージを取得してrecyclerViewに反映する
         db = FirebaseFirestore.getInstance()
@@ -114,39 +117,36 @@ class ReplyActivity : AppCompatActivity() {
         //現在時刻の取得
         val date = Date()
 
-        //map...keyとvalueを一つのセットにしてデータを管理する
-        //他言語ではハッシュや辞書(ディクショナリ)と呼ばれるもの
-        //Firestoreでデータを登録する際、Hashを必ず使用する。型が指定されている。
-//        val mail = hashMapOf(
-//            "datetime" to format.format(date),
-//            "sender" to myEmailAddress,
-//            "message" to message
-//        )
 
-        val sentId = intent.getStringExtra("key")
-
-        // whereでコレクションの中をフィルタできる
-//        db.collection("messages").where()
-
-        val mail2 = Reply(datetime = date, sender = myEmailAddress, message = message)
-
-
-        //collectionにいれたものがコレクションに入る
-        db.collection("groups") //usersとかmail
-            .document(sentGroupId)
-            .collection("messages")
-            .document(sentPostId)
-            .collection("replies")
-            .add(mail2)
+        var myUid = FirebaseAuth.getInstance().currentUser?.uid
+        db.collection("user")
+            .document(myUid!!)
+            .get()
             .addOnSuccessListener {
-                //データの保存が成功した際の処理
-                messageEdit.text.clear()
+                var userInfo = it.toObject<UserInformation>()!!
+                name = userInfo.userName
+
+                val mail2 = Reply(datetime = date, sender = name, message = message)
+
+
+                //collectionにいれたものがコレクションに入る
+                db.collection("groups")
+                    .document(sentGroupId)
+                    .collection("messages")
+                    .document(sentPostId)
+                    .collection("replies")
+                    .add(mail2)
+                    .addOnSuccessListener {
+                        //データの保存が成功した際の処理
+                        messageEdit.text.clear()
+                    }
+                    .addOnFailureListener { e ->
+                        //データの保存が失敗した際の処理
+                        //致命的なエラーが発生したらログに出力されるようにする。
+                        Log.e("Firestore", "Error writing document", e)
+                    }
             }
-            .addOnFailureListener { e ->
-                //データの保存が失敗した際の処理
-                //致命的なエラーが発生したらログに出力されるようにする。
-                Log.e("Firestore", "Error writing document", e)
-            }
+
     }
 
 
