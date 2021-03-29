@@ -18,25 +18,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        val mainToolbar = findViewById<Toolbar>(R.id.toolbar)
-//        setSupportActionBar(mainToolbar)
-//        //ツールバーに戻るボタンを設置する
-//        supportActionBar!!.setDisplayShowTitleEnabled(false)
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         // アクションバーにツールバーをセット
         setSupportActionBar(toolbar)
         // ツールバーに戻るボタンを設置
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val groupSentId = intent.getStringExtra("ID2")
 
-        //自分のメールアドレスが取得できるようにする
-        myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
         name = ""
 
 
-        //自分のメールアドレスが表示されるようにする
-        myId.setText(myEmailAddress)
 
 
         //送信ボタンを押した時の設定

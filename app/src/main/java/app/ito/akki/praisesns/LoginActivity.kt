@@ -37,40 +37,45 @@ class LoginActivity : AppCompatActivity() {
             val userNameEditText = findViewById<TextInputEditText>(R.id.userNameEdit)
             val userNameText = userNameEditText.text.toString()
 
-            //メールアドレスとパスワードを使い、新規登録をする
-            //新規登録する際にはcreateUserWithEmailAndPasswordを用いる
-            auth.createUserWithEmailAndPassword(emailText, passText)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            baseContext, "SignUp 成功",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        //ユーザのプロフィールを取得
-                        val userInfo = UserInformation(userName = userNameText)
-                        var myUid = FirebaseAuth.getInstance().currentUser?.uid
-                        db.collection("user")
-                            .document(myUid!!)
-                            .set(userInfo)
-                            .addOnSuccessListener {
-                                Toast.makeText(
-                                    baseContext, "SignUp 成功",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.d("username",userInfo.userName)
-                            }
+            if (emailText.isNullOrEmpty() == false && passText.isNullOrEmpty() == false) {
+                auth.createUserWithEmailAndPassword(emailText, passText)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(
+                                baseContext, "SignUp 成功",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //ユーザのプロフィールを取得
+                            val userInfo = UserInformation(userName = userNameText)
+                            var myUid = FirebaseAuth.getInstance().currentUser?.uid
+                            db.collection("user")
+                                .document(myUid!!)
+                                .set(userInfo)
+                                .addOnSuccessListener {
+                                    Toast.makeText(
+                                        baseContext, "SignUp 成功",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    Log.d("username", userInfo.userName)
+                                }
 
 
-                        val toChooseGroups = Intent(this, ChooseGroupsActivity::class.java)
-                        startActivity(toChooseGroups)
+                            val toChooseGroups = Intent(this, ChooseGroupsActivity::class.java)
+                            startActivity(toChooseGroups)
 
-                    } else {
-                        Toast.makeText(
-                            baseContext, "SignUp 失敗",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        } else {
+                            Toast.makeText(
+                                baseContext, "SignUp 失敗",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                }
+            }else{
+                Toast.makeText(
+                    baseContext, "SignUp 失敗",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
 
         }
 
@@ -80,22 +85,29 @@ class LoginActivity : AppCompatActivity() {
             val passEditText = findViewById<TextInputEditText>(R.id.passEdit)
             val passWordText = passEditText.text.toString()
 
-            auth.signInWithEmailAndPassword(emailText, passWordText)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            baseContext, "Login 成功",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        val toChooseGroups = Intent(this, ChooseGroupsActivity::class.java)
-                        startActivity(toChooseGroups)
-                    } else {
-                        Toast.makeText(
-                            baseContext, "Login 失敗",
-                            Toast.LENGTH_SHORT
-                        ).show()
+            if (emailText.isNullOrEmpty() == false && passWordText.isNullOrEmpty() == false) {
+                auth.signInWithEmailAndPassword(emailText, passWordText)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(
+                                baseContext, "Login 成功",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val toChooseGroups = Intent(this, ChooseGroupsActivity::class.java)
+                            startActivity(toChooseGroups)
+                        } else {
+                            Toast.makeText(
+                                baseContext, "Login 失敗",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                }
+            }else{
+                Toast.makeText(
+                    baseContext, "Login 失敗",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
     }

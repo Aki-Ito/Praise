@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,12 +26,19 @@ class SentMessagesActivity : AppCompatActivity() {
     private lateinit var viewAdapter: DisplayMessageAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
 
-    val postId: String = "id"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sent_messages)
 
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        // アクションバーにツールバーをセット
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+
+        auth = FirebaseAuth.getInstance()
         myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
 
         val sentId = intent.getStringExtra("ID")
@@ -98,12 +107,16 @@ class SentMessagesActivity : AppCompatActivity() {
         viewAdapter.setOnItemClickListener(object : DisplayMessageAdapter.OnItemClickListener {
             override fun onItemClickListener(
                 view: View,
-                postId: String
+                postId: String,
+                message: String,
+                sender: String
             ) {
                 val context: Context = view.context
                 val toReply = Intent(context, ReplyActivity::class.java)
                 toReply.putExtra("postKey", postId)
                 toReply.putExtra("groupKey", sentId)
+                toReply.putExtra("targetPost", message)
+                toReply.putExtra("PostSender", sender)
                 startActivity(toReply)
             }
         }
@@ -158,6 +171,32 @@ class SentMessagesActivity : AppCompatActivity() {
                 post.workedHardButtonCount = post.workedHardButtonCount + 1
                 it.reference.set(post)
             }
+    }
+
+    //ツールバーのメニューを初期化する
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuInflater = menuInflater
+        menuInflater.inflate(R.menu.menu_sentmessage, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            R.id.logout -> {
+                auth.signOut()
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                true
+            }
+
+            R.id.toGroup -> {
+                val intent = Intent(this, ChooseGroupsActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 

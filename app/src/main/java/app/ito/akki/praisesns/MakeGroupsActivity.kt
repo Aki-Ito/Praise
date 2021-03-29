@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_make_groups.*
 import java.util.*
@@ -18,6 +20,13 @@ class MakeGroupsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_make_groups)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        // アクションバーにツールバーをセット
+        setSupportActionBar(toolbar)
+        // ツールバーに戻るボタンを設置
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         confirmName.setOnClickListener {
             createPassword()
@@ -56,4 +65,15 @@ class MakeGroupsActivity : AppCompatActivity() {
             password += NumberList[randomIndex]
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // android.R.id.home に戻るボタンを押した時のidが取得できる
+        if (item.itemId == android.R.id.home) {
+            // 今回はActivityを終了させている
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
 }

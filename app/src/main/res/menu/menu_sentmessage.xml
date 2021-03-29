@@ -5,8 +5,14 @@
 
 
     <item
+        android:id="@+id/toGroup"
+        android:title="設定"
+        android:icon="@drawable/relation"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/logout"
         android:title="設定"
         android:icon="@drawable/ic_baseline_logout_24"
         app:showAsAction="ifRoom"/>
+
 </menu>

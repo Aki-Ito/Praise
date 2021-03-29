@@ -58,7 +58,7 @@ class DisplayMessageAdapter
 
         //クリックした時の処理を記述
         holder.container.setOnClickListener {
-            listener.onItemClickListener(it, myDataset[position].id)
+            listener.onItemClickListener(it, myDataset[position].id, myDataset[position].message, myDataset[position].sender)
         }
         holder.goodButton.setOnClickListener {
             onGoodButtonClick(myDataset[position].id)
@@ -83,7 +83,7 @@ class DisplayMessageAdapter
 
     //インタフェースを作成する
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, postId: String)
+        fun onItemClickListener(view: View, postId: String, message: String, sender: String)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

@@ -40,11 +40,18 @@ class ReplyActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         // ツールバーに戻るボタンを設置
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         myEmailAddress = FirebaseAuth.getInstance().currentUser?.email.toString()
 
         val sentPostId = intent.getStringExtra("postKey")
         val sentGroupId = intent.getStringExtra("groupKey")
+        val sentTargetMessage = intent.getStringExtra("targetPost")
+        val sentTargetSender = intent.getStringExtra("PostSender")
+        //textViewにリプライの対象となる投稿を表示させる
+        mainPost.text = sentTargetMessage
+        //textViewに投稿者が反映されるようにする
+        senderMain.text = "from: "+sentTargetSender
         send.setOnClickListener {
             replyMessage(
                 messageEdit.text.toString(), sentGroupId!!, sentPostId!!
