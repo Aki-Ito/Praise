@@ -12,9 +12,21 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical">
-    <TextView
+
+        <TextView
+            android:id="@+id/fragmentTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:text="利用規約へ同意してください"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
         android:id="@+id/agreementTextView"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="20dp"
         android:layout_width="300dp"
         android:layout_height="400dp"
         android:layout_gravity="center_horizontal"
