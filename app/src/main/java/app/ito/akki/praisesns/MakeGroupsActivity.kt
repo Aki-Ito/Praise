@@ -24,7 +24,6 @@ class MakeGroupsActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         // アクションバーにツールバーをセット
         setSupportActionBar(toolbar)
-        // ツールバーに戻るボタンを設置
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 

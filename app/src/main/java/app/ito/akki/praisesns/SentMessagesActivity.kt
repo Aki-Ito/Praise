@@ -33,8 +33,8 @@ class SentMessagesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sent_messages)
 
+        //ツールバーの設定
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        // アクションバーにツールバーをセット
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
@@ -50,12 +50,7 @@ class SentMessagesActivity : AppCompatActivity() {
             db.collection("groups")
                 .document(sentId)
                 .collection("messages")
-                //orderByを使用することでフィールドを指定し、データの並び替えができる
-                //Query.Direction.DESCENDINGによって降順に並び替えることができる
                 .orderBy("datetime", Query.Direction.DESCENDING)
-                //以下でFirestoreの更新時の操作を登録
-                //.addSnapshotListenerの中に書いた処理がデータベース更新時に自動で処理される
-                //データの取得
                 .addSnapshotListener { value, e ->
                     if (e != null) {
                         Log.w("Firestore", "Listen failed.", e)
@@ -68,7 +63,7 @@ class SentMessagesActivity : AppCompatActivity() {
 
                         allMessages.add(PostClass)
 
-                        //Logに出力させることで値が保存されているか確認することができる
+
                         Log.d("sentMessages", "メッセージは「" + PostClass.message + "」")
                         Log.d("sender", "senderは「" + PostClass.sender + "」")
                     }
